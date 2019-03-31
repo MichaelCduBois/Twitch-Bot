@@ -1,2 +1,8 @@
+# Python Cache Directory
 /__pycache__/
+
+# VS Code Directory
 /.vscode/
+
+# Environment File
+.env
