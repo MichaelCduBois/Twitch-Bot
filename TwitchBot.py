@@ -1,4 +1,7 @@
+from datetime import datetime
+from dotenv import load_dotenv
 import json
+import os
 import re
 import socket
 from time import sleep
@@ -8,13 +11,16 @@ class TwitchBot:
 
     def __init__(self):
 
+        # Load .env file
+        load_dotenv()
+
         # Twitch Bot Configuration
-        self.HOST = "irc.chat.twitch.tv"
-        self.PORT = 6667
+        self.HOST = os.getenv("TTV_HOST")
+        self.PORT = int(os.getenv("TTV_PORT"))
         self.RATE = (20/30)
-        self.NICK = ""
-        self.PASS = ""
-        self.CHAN = "#"
+        self.NICK = os.getenv("TTV_USERNAME")
+        self.PASS = os.getenv("TTV_TOKEN")
+        self.CHAN = os.getenv("TTV_CHANNEL")
 
         # Socket Connection
         self.socket = socket.socket()
@@ -44,7 +50,7 @@ class TwitchBot:
                 self.message = self.MSG.sub("", self.response)
 
                 # Need to log
-                print("{}: {}".format(self.username, self.message))
+                self.log("{}: {}".format(self.username, self.message))
 
                 with open("Commands.json") as cmd_file:
 
@@ -52,7 +58,7 @@ class TwitchBot:
 
                     for self.command in self.commands:
 
-                        if re.match("!" + self.command + r"\b", self.message):
+                        if "!" + self.command in self.message.split():
 
                             self.validate()
 
@@ -75,7 +81,6 @@ class TwitchBot:
         )
 
     def validate(self):
-
         """
         Retrieves the configured value for the command.
         """
@@ -96,5 +101,21 @@ class TwitchBot:
                     self.commands[self.command]
                 )
             )
+
+    def log(self, msg):
+        """
+        Sends chat message to log.
+        Keyword arguments:
+        msg - the message to send to log
+        """
+        print(
+            "{} -- {}".format(
+                datetime.now().strftime(
+                    "%Y-%m-%d %H:%M:%S"
+                ),
+                msg
+            )
+        )
+
 
 TwitchBot().__init__()
