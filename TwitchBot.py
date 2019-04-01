@@ -113,6 +113,14 @@ class TwitchBot:
 
 try:
 
+    os.makedirs("logs")
+
+except OSError:
+
+    pass
+
+try:
+
     # Logging Setup
     logging.basicConfig(
         filename="logs/{} - Twitch Chat.log".format(
