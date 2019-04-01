@@ -51,9 +51,14 @@ class TwitchBot:
 
                 self.message = self.MSG.sub("", self.response)
 
-                # self.message = self.message.replace("\r\n", "")
-
-                logging.info("{}: {}".format(self.username, self.message))
+                logging.info(
+                    "{}: {}".format(
+                        self.username,
+                        self.message.replace(
+                            "\r\n", ""
+                        )
+                    )
+                )
 
                 with open("Commands.json") as cmd_file:
 
