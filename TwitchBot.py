@@ -1,6 +1,7 @@
 from datetime import datetime
 from dotenv import load_dotenv
 import json
+import logging
 import os
 import re
 import socket
@@ -21,6 +22,7 @@ class TwitchBot:
         self.NICK = os.getenv("TTV_USERNAME")
         self.PASS = os.getenv("TTV_TOKEN")
         self.CHAN = os.getenv("TTV_CHANNEL")
+        self.PREFIX = os.getenv("TTV_CMD_PREFIX")
 
         # Socket Connection
         self.socket = socket.socket()
@@ -49,8 +51,9 @@ class TwitchBot:
 
                 self.message = self.MSG.sub("", self.response)
 
-                # Need to log
-                self.log("{}: {}".format(self.username, self.message))
+                # self.message = self.message.replace("\r\n", "")
+
+                logging.info("{}: {}".format(self.username, self.message))
 
                 with open("Commands.json") as cmd_file:
 
@@ -58,7 +61,7 @@ class TwitchBot:
 
                     for self.command in self.commands:
 
-                        if "!" + self.command in self.message.split():
+                        if self.PREFIX + self.command in self.message.split():
 
                             self.validate()
 
@@ -102,20 +105,25 @@ class TwitchBot:
                 )
             )
 
-    def log(self, msg):
-        """
-        Sends chat message to log.
-        Keyword arguments:
-        msg - the message to send to log
-        """
-        print(
-            "{} -- {}".format(
-                datetime.now().strftime(
-                    "%Y-%m-%d %H:%M:%S"
-                ),
-                msg
+
+try:
+
+    # Logging Setup
+    logging.basicConfig(
+        filename="logs/{} - Twitch Chat.log".format(
+            datetime.now().strftime(
+                "%Y-%m-%d"
             )
-        )
+        ),
+        format='%(asctime)s -- %(message)s',
+        datefmt='%Y-%M-%d %H:%M:%S',
+        level=logging.INFO
+    )
 
+    # Starts the Bot
+    TwitchBot().__init__()
 
-TwitchBot().__init__()
+except KeyboardInterrupt:
+
+    # Need to log
+    logging.info("Script closed by user.")
