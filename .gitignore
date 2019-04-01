@@ -4,5 +4,8 @@
 # VS Code Directory
 /.vscode/
 
+# Logs Directory
+/logs/
+
 # Environment File
 .env
