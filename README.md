@@ -4,18 +4,20 @@ A Twitch bot written in Python3 for use with the Yegnaro and Concealed Armies ch
 
 ## Setup
 
-To correctly setup TwitchBot, modify the section of files below
+To correctly setup TwitchBot, modify the files below
 
-### TwitchBot
+### .env-example
 
-``` python3
-# Twitch Bot Configuration
-self.HOST = "irc.chat.twitch.tv"
-self.PORT = 6667
-self.RATE = (20/30)
-self.NICK = "<Twitch Bot Name>"
-self.PASS = "<Oauth Token>"
-self.CHAN = "#<Twitch Account Channel>"
+1. Rename `.env-example` to `.env`
+
+``` environment
+# Environment Specifics
+TTV_HOST = "irc.chat.twitch.tv"
+TTV_PORT = 6667
+TTV_USERNAME = ""
+TTV_TOKEN = ""
+TTV_CHANNEL = "#"
+TTV_CMD_PREFIX = "!"
 ```
 
 ### Commands.json
